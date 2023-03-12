@@ -1,8 +1,10 @@
-﻿namespace JNISharp.NativeInterface;
+﻿using System;
+
+namespace JNISharp.NativeInterface;
 
 public readonly struct JMethodID : IEquatable<JMethodID>
 {
-    public readonly IntPtr Handle { get; init; }
+    public readonly IntPtr Handle { get; }
 
     internal JMethodID(IntPtr handle)
     {

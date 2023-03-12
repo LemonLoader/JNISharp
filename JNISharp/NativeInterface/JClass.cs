@@ -1,16 +1,18 @@
-﻿namespace JNISharp.NativeInterface;
+﻿using System.Collections.Generic;
+
+namespace JNISharp.NativeInterface;
 
 public class JClass : JObject
 {
-    private Dictionary<Tuple<string, string>, JFieldID> FieldCache { get; set; } = new();
+    private Dictionary<LemonTuple<string, string>, JFieldID> FieldCache { get; set; } = new();
 
-    private Dictionary<Tuple<string, string>, JMethodID> MethodCache { get; set; } = new();
+    private Dictionary<LemonTuple<string, string>, JMethodID> MethodCache { get; set; } = new();
 
     public JClass() : base() { }
 
     public JFieldID GetFieldID(string name, string sig)
     {
-        Tuple<string, string> key = new(name, sig);
+        LemonTuple<string, string> key = new(name, sig);
 
         if (this.FieldCache.TryGetValue(key, out JFieldID found))
         {
@@ -26,7 +28,7 @@ public class JClass : JObject
 
     public JFieldID GetStaticFieldID(string name, string sig)
     {
-        Tuple<string, string> key = new(name, sig);
+        LemonTuple<string, string> key = new(name, sig);
 
         if (this.FieldCache.TryGetValue(key, out JFieldID found))
         {
@@ -42,7 +44,7 @@ public class JClass : JObject
 
     public JMethodID GetMethodID(string name, string sig)
     {
-        Tuple<string, string> key = new(name, sig);
+        LemonTuple<string, string> key = new(name, sig);
 
         if (this.MethodCache.TryGetValue(key, out JMethodID found))
         {
@@ -58,7 +60,7 @@ public class JClass : JObject
 
     public JMethodID GetStaticMethodID(string name, string sig)
     {
-        Tuple<string, string> key = new(name, sig);
+        LemonTuple<string, string> key = new(name, sig);
 
         if (this.MethodCache.TryGetValue(key, out JMethodID found))
         {

@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <TargetFramework>net35</TargetFramework>
+	<LangVersion>10</LangVersion>
     <Nullable>enable</Nullable>
     <Authors>Warren Ulrich</Authors>
     <Description>JNI &amp; JVMTI bindings for C#.</Description>

@@ -1,5 +1,8 @@
 ﻿namespace JNISharp.NativeInterface;
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 /// <summary>
@@ -18,11 +21,7 @@ public unsafe static partial class JNI
         {
             if (env == null)
             {
-                IntPtr temp = IntPtr.Zero;
-                var res = VM->Functions->AttachCurrentThread(VM, out env, ref temp);
-
-                if (res != JNI.Result.Ok)
-                    throw new JNIResultException(res);
+                Initialize(new JavaVMInitArgs());
             }
 
             return env;
@@ -36,23 +35,6 @@ public unsafe static partial class JNI
         unsafe
         {
             JNI.Result res = JVMImports.JNI_CreateJavaVM(out VM, out env, &args);
-            if (res != JNI.Result.Ok)
-                throw new JNIResultException(res);
-        }
-    }
-
-    public static void InitializeFromCreatedVM()
-    {
-        unsafe
-        {
-            var res = JVMImports.JNI_GetCreatedJavaVMs(out VM, 1, out int _);
-
-            if (res != JNI.Result.Ok)
-                throw new JNIResultException(res);
-
-            IntPtr temp = IntPtr.Zero;
-            res = VM->Functions->AttachCurrentThread(VM, out env, ref temp);
-
             if (res != JNI.Result.Ok)
                 throw new JNIResultException(res);
         }

@@ -1,12 +1,14 @@
-﻿namespace JNISharp.NativeInterface;
+﻿using System;
+
+namespace JNISharp.NativeInterface;
 
 public class JObject : IDisposable
 {
     private bool Disposed { get; set; }
 
-    public IntPtr Handle { get; init; }
+    public IntPtr Handle { get; set;}
 
-    internal JNI.ReferenceType ReferenceType { get; init; }
+    internal JNI.ReferenceType ReferenceType { get; set;}
 
     public JObject() { }
 
