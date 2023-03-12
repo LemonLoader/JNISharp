@@ -805,8 +805,8 @@ public unsafe static partial class JNI
             if (!str.Valid())
                 return "";
 
-            IntPtr res = Env->Functions->GetStringChars(Env, str.Handle, out byte isCopy);
-            string? resultString = Marshal.PtrToStringUni(res);
+            IntPtr res = Env->Functions->GetStringUTFChars(Env, str.Handle, out byte isCopy);
+            string? resultString = Marshal.PtrToStringAuto(res);
             Env->Functions->ReleaseStringChars(Env, str.Handle, res);
             return resultString ?? "";
         }
@@ -814,7 +814,7 @@ public unsafe static partial class JNI
 
     private static void ReleaseStringChars(JString str, IntPtr chars)
     {
-        throw new NotImplementedException();
+        Env->Functions->ReleaseStringChars(Env, str.Handle, chars);
     }
 
     public static int GetArrayLength<T>(JArray<T> jarray)
