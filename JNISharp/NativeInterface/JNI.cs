@@ -19,9 +19,10 @@ public unsafe static partial class JNI
     {
         get
         {
+            // this theoretically will never get called before it is initialized
             if (env == null)
             {
-                Initialize(new JavaVMInitArgs());
+                Initialize(IntPtr.Zero);
             }
 
             return env;
@@ -30,13 +31,24 @@ public unsafe static partial class JNI
 
     internal static Dictionary<string, JClass> ClassCache { get; set; } = new();
 
-    public static void Initialize(JavaVMInitArgs args)
+    public static void Initialize(IntPtr vmPtr)
     {
+        if (vmPtr == IntPtr.Zero)
+            throw new ArgumentException("Invalid VM pointer.");
+
         unsafe
         {
-            JNI.Result res = JVMImports.JNI_CreateJavaVM(out VM, out env, &args);
+            JavaVM tempVM = (JavaVM)Marshal.PtrToStructure(vmPtr, typeof(JavaVM));
+            VM = &tempVM;
+
+            IntPtr envPtr = IntPtr.Zero;
+            JNI.Result res = VM->Functions->GetEnv(VM, out envPtr, 0x00010006 /*JNI_VERSION_1_6*/);
+
             if (res != JNI.Result.Ok)
                 throw new JNIResultException(res);
+
+            JNIEnv tempEnv = (JNIEnv)Marshal.PtrToStructure(envPtr, typeof(JNIEnv));
+            env = &tempEnv;
         }
     }
 
