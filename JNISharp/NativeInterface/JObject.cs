@@ -29,7 +29,8 @@ public class JObject : IDisposable
         if (Disposed || this.Handle == IntPtr.Zero)
             return;
 
-        switch (this.ReferenceType)
+        // TODO: this is an awful idea, but it causes a crash otherwise.
+        /*switch (this.ReferenceType)
         {
             case JNI.ReferenceType.Local:
                 JNI.DeleteLocalRef(this);
@@ -42,7 +43,7 @@ public class JObject : IDisposable
             case JNI.ReferenceType.WeakGlobal:
                 JNI.DeleteWeakGlobalRef(this);
                 break;
-        }
+        }*/
 
         Disposed = true;
     }
