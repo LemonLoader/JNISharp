@@ -41,13 +41,18 @@ public unsafe static partial class JNI
             VM = (JavaVM*)vmPtr;
 
             IntPtr envPtr = IntPtr.Zero;
-            JNI.Result res = VM->Functions->GetEnv(VM, out envPtr, 0x00010006 /*JNI_VERSION_1_6*/);
+            Result res = VM->Functions->GetEnv(VM, out envPtr, 0x00010006 /*JNI_VERSION_1_6*/);
 
-            if (res != JNI.Result.Ok)
-                throw new JNIResultException(res);
+            if (res != Result.Detached)
+            {
+                env = (JNIEnv*)envPtr;
+                return;
+            }
 
-            JNIEnv tempEnv = (JNIEnv)Marshal.PtrToStructure(envPtr, typeof(JNIEnv));
-            env = &tempEnv;
+            IntPtr refPtr = IntPtr.Zero;
+            res = VM->Functions->AttachCurrentThread(VM, out JNIEnv* localEnv, ref refPtr);
+
+            env = localEnv;
         }
     }
 
