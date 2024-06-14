@@ -38,8 +38,7 @@ public unsafe static partial class JNI
 
         unsafe
         {
-            JavaVM tempVM = (JavaVM)Marshal.PtrToStructure(vmPtr, typeof(JavaVM));
-            VM = &tempVM;
+            VM = (JavaVM*)vmPtr;
 
             IntPtr envPtr = IntPtr.Zero;
             JNI.Result res = VM->Functions->GetEnv(VM, out envPtr, 0x00010006 /*JNI_VERSION_1_6*/);
